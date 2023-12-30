@@ -34,15 +34,6 @@ yarn hardhat
 yarn hardhat compile
 ```
 
-## 测试合约
-
-在 test 目录下编写测试文件，然后运行：
-
-```shell
-# 可以在后面指明测试文件 yarn hardhat test test/Lock.js
-yarn hardhat test
-```
-
 ## 部署合约
 
 ```shell
