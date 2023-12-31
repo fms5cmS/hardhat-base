@@ -7,11 +7,14 @@
 const hre = require("hardhat");
 
 async function main() {
-  const proposolA = hre.ethers.encodeBytes32String("a")
-  const proposolB = hre.ethers.encodeBytes32String("b")
-  console.log(a)
-  console.log(proposolB)
-  const ballot = await hre.ethers.deployContract("Ballot", [proposolA, proposolB]);
+  const aBytes = hre.ethers.toUtf8Bytes("a");
+  const proposolA = hre.ethers.zeroPadValue(aBytes, 32)
+  const bBytes = hre.ethers.toUtf8Bytes("b");
+  const proposolB = hre.ethers.zeroPadValue(bBytes, 32)
+  const proposolNames = [proposolA, proposolB]
+
+  console.log(proposolNames)
+  const ballot = await hre.ethers.deployContract("Ballot", [proposolNames]);
   await ballot.waitForDeployment();
 
   console.log(`Ballot deployed to ${ballot.target}`);
