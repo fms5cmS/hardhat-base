@@ -34,6 +34,14 @@ yarn hardhat
 yarn hardhat compile
 ```
 
+## 开启本地节点
+
+可以以独立方式运行 Hardhat Network，以便外部客户端可以连接到它。
+
+```shell
+yarn hardhat node
+```
+
 ## 部署合约
 
 ```shell
@@ -46,15 +54,33 @@ yarn hardhat run --network hardhat scripts/deploy.js
 # 如果要增加网络，在 hardhat.config.js 配置
 ```
 
+如果使用默认的 Hardhat 网络部署，当 Hardhat 运行完成时，部署实际上是会丢失的！
+
 相比 add.sol，ballot.sol 中合约的构造函数有参数，所以在部署脚本中需要设置初始的参数！
 
-## 开启本地节点
+### 部署到远端网络
 
-可以以独立方式运行 Hardhat Network，以便外部客户端可以连接到它。
+在 hardhat.config.js 文件中增加远端网络的配置信息
 
-```shell
-yarn hardhat node
+```javascript
+const LOCAL_URL = "http://localhost:7545"
+const LOCAL_ADDRESS = "0xC5B1B728C203EaD38b0b8d7d7267ef12a5523845"
+const LOCAL_PRIVATE_KEY = "0xaa529b2ea31c96bed2a26e346f437b3fa7406e9e638d000c906fa952a44f4c83"
+
+module.exports = {
+  solidity: "0.8.19",
+  networks: {
+    local: {
+      url: `${LOCAL_URL}`,
+      accounts: [LOCAL_PRIVATE_KEY]
+    }
+  }
+};
 ```
+
+这里为了在本地测试，配置的是本地的信息，所以需要先使用 `yarn hardhat node` 开启一个本地节点，然后再 `yarn hardhat run scripts/deploy_vallot.js --network local` 进行部署。
+
+注意：通过 `yarn hardhat node` 开启的本地节点，如果向其部署合约，再调用接口访问合约时会报错 未识别的 methodId，所以建议使用 [Ganache](https://github.com/trufflesuite/ganache-ui) 创建一个本地的区块链后再部署到上面，或直接部署到测试网上。
 
 ## 验证合约
 
